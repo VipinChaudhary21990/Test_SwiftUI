@@ -9,72 +9,47 @@ import SwiftUI
 import CoreData
 
 struct ContentView: View {
-    @Environment(\.managedObjectContext) private var viewContext
-
-    @FetchRequest(
-        sortDescriptors: [NSSortDescriptor(keyPath: \Item.timestamp, ascending: true)],
-        animation: .default)
-    private var items: FetchedResults<Item>
+    @State var Username:String = "Vipin chaudhary"
+    @State var Password:String = ""
+    @State var showingAlert = false
+   // @Environment(\.managedObjectContext) private var viewContext
+    // private var items: FetchedResults<Item>
 
     var body: some View {
-        List {
-            ForEach(items) { item in
-                Text("Item1 at \(item.timestamp!, formatter: itemFormatter)")
-            }
-            .onDelete(perform: deleteItems)
-        }
-        .toolbar {
-            #if os(iOS)
-            EditButton()
-            #endif
+        Label(
+            title: { Text("Game App")
+                .foregroundColor(.red)
+            },
+            icon: { /*@START_MENU_TOKEN@*/Image(systemName: "42.circle")/*@END_MENU_TOKEN@*/ }
+     )
+        .font(.system(size: 56.0))
+       // .padding(.top,12)
+        VStack(alignment: .center, spacing: 10, content: {
+        Label("Login Screen", systemImage:"")
+            .labelStyle(TitleOnlyLabelStyle())
+        TextField("Enter the Username", text: $Username)
+           // .frame(width: 200, height: 200, alignment: .center)
+        TextField("Enter the Password", text: $Password)
+           // .frame(width: 200, height: 200, alignment: .center)
+        })
+        Button(action: {
+            Username = ""
+            Password = ""
+                   self.showingAlert = true
+               }) {
+                   Text(" Login ")
+               }
+               .alert(isPresented: $showingAlert) {
+                   Alert(title: Text("Alert"), message: Text("Login:\(Username):Pass:\(Password)"), dismissButton: .default(Text("Got it!")))
+               }
 
-            Button(action: addItem) {
-                Label("Add New item", systemImage: "plus")
-            }
-        }
     }
-
-    private func addItem() {
-        withAnimation {
-            let newItem = Item(context: viewContext)
-            newItem.timestamp = Date()
-
-            do {
-                try viewContext.save()
-            } catch {
-                // Replace this implementation with code to handle the error appropriately.
-                // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-                let nsError = error as NSError
-                fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
-            }
-        }
-    }
-
-    private func deleteItems(offsets: IndexSet) {
-        withAnimation {
-            offsets.map { items[$0] }.forEach(viewContext.delete)
-
-            do {
-                try viewContext.save()
-            } catch {
-                // Replace this implementation with code to handle the error appropriately.
-                // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-                let nsError = error as NSError
-                fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
-            }
-        }
-    }
+    
 }
 
-private let itemFormatter: DateFormatter = {
-    let formatter = DateFormatter()
-    formatter.dateStyle = .short
-    formatter.timeStyle = .medium
-    return formatter
-}()
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        ContentView().environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
+        ContentView()
     }
 }
