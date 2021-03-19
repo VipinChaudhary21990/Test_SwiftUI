@@ -19,7 +19,7 @@ struct ContentView: View {
     var body: some View {
         List {
             ForEach(items) { item in
-                Text("Item at \(item.timestamp!, formatter: itemFormatter)")
+                Text("Item1 at \(item.timestamp!, formatter: itemFormatter)")
             }
             .onDelete(perform: deleteItems)
         }
@@ -29,7 +29,7 @@ struct ContentView: View {
             #endif
 
             Button(action: addItem) {
-                Label("Add Item", systemImage: "plus")
+                Label("Add  Item", systemImage: "plus")
             }
         }
     }
