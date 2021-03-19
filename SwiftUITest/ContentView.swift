@@ -29,7 +29,7 @@ struct ContentView: View {
             #endif
 
             Button(action: addItem) {
-                Label("Add New Item", systemImage: "plus")
+                Label("Add  Item", systemImage: "plus")
             }
         }
     }
